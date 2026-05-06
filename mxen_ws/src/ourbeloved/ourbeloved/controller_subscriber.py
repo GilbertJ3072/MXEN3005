@@ -18,17 +18,36 @@ class ControllerSubscriber(Node):
         self.xarm = XArm()
         self.newJoints = self.xarm.get_joints()
         self.grip = 0
+        self.rest_mode = False
 
     def timer_callback(self):
-        self.xarm.set_joints(self.newJoints)
+        if not self.rest_mode: #only update joints if not in rest mode
+            self.xarm.set_joints(self.newJoints)
 
     def listener_callback(self, msg):
-        if msg.buttons[5]:
+        #resting
+        #rest
+        if msg.buttons[2]: #triangle
+            self.rest_mode = True
+            self.xarm.home()
+            time.sleep(2)
+            self.xarm.rest()
+        #unrest
+        if msg.buttons[1]: #circle
+            self.rest_mode = False
+            self.xarm.home()
+            time.sleep(2)
+            self.newJoints = self.xarm.get_joints()
+
+        #gripper toggle
+        if msg.buttons[5]: #right bunmper
             self.xarm.grip(1)
         else:
             self.xarm.grip(0)
 
-        if msg.buttons[10]:
+        
+        #homing button
+        if msg.buttons[10]: #domer
             self.xarm.home()
             time.sleep(2)
             self.newJoints = self.xarm.get_joints()
