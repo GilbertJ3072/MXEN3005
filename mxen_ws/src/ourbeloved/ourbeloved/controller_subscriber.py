@@ -25,7 +25,6 @@ class ControllerSubscriber(Node):
             self.xarm.set_joints(self.newJoints)
 
     def listener_callback(self, msg):
-        
         #resting
         #rest
         if msg.buttons[2]: #triangle
@@ -33,13 +32,12 @@ class ControllerSubscriber(Node):
             self.xarm.home()
             time.sleep(2)
             self.xarm.rest()
+        #unrest
         if msg.buttons[1]: #circle
             self.rest_mode = False
             self.xarm.home()
             time.sleep(2)
             self.newJoints = self.xarm.get_joints()
-
-
 
         #gripper toggle
         if msg.buttons[5]: #right bunmper
