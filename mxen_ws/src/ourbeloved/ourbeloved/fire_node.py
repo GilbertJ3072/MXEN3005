@@ -3,6 +3,7 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
 from std_msgs.msg import Bool
+from sensor_msgs.msg import Joy
 
 
 class fire_node(Node):
@@ -11,14 +12,19 @@ class fire_node(Node):
         super().__init__("fire_node")
         self.subscription = self.create_subscription(Joy, "joy", self.listener_callback, 10)
         self.publisher = self.create_publisher(Bool, "fire", 10)
-        timer_period = 0.05
-        self.timer = self.create_timer(timer_period, self.timer_callback)
+   #      timer_period = 0.05
+   #      self.timer = self.create_timer(timer_period, self.timer_callback)
         self.pressed = False
 
     def listener_callback(self, msg):
-        msg = Bool()
-        msg.data = True
-        self.publisher.publish(msg)
+        if msg.buttons[5]:
+            msg = Bool()
+            msg.data = True
+            self.publisher.publish(msg)
+        else:
+            msg = Bool()
+            msg.data = False
+            self.publisher.publish(msg)
         
 
 
