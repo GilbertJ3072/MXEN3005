@@ -77,7 +77,10 @@ class ControllerSubscriber(Node):
             diff_y = msg.axes[4]
             diff_z = msg.axes[1]
 
-            self.newJoints = self.cartesian_mode(diff_x, diff_y, diff_z)
+            ik_joints = self.cartesian_mode(diff_x, diff_y, diff_z) 
+
+            if ik_joints is not None and self.xarm.is_goal_valid(joints) == 0:
+                self.newJoints = ik_joints
             
             
 
