@@ -19,10 +19,11 @@ class ControllerSubscriber(Node):
         self.newJoints = self.xarm.get_joints()
         self.grip = 0
         self.rest_mode = False
+        self.control_mode = 'joint'
 
     def timer_callback(self):
         if not self.rest_mode: #only update joints if not in rest mode
-            self.xarm.set_joints(self.newJoints)
+            self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
 
     def listener_callback(self, msg):
         #resting
@@ -53,19 +54,30 @@ class ControllerSubscriber(Node):
             time.sleep(2)
             self.newJoints = self.xarm.get_joints()
 
-        joint0 = msg.axes[0]+self.newJoints[0]
-        joint1 = msg.axes[4]+self.newJoints[1]
-        joint2 = msg.axes[1]+self.newJoints[2]
-        joint3 = msg.axes[3]+self.newJoints[3]
-        joint4 = msg.axes[7]+self.newJoints[4]
-        joint5 = msg.axes[6]+self.newJoints[5]
+        if msg.buttons[8]:
+            self.control_mode = 'cartesian'
         
-        joints = (joint0, joint1, joint2, joint3, joint4, joint5)
+        if msg.buttons[9]:
+            self.control_mode = 'joint'
+
+        # Joint control mode
+        if self.control_mode == 'joint':
+            joint0 = msg.axes[0]+self.newJoints[0]
+            joint1 = msg.axes[4]+self.newJoints[1]
+            joint2 = msg.axes[1]+self.newJoints[2]
+            joint3 = msg.axes[3]+self.newJoints[3]
+            joint4 = msg.axes[7]+self.newJoints[4]
+            joint5 = msg.axes[6]+self.newJoints[5]
+            
+            joints = (joint0, joint1, joint2, joint3, joint4, joint5)
+        
+        if self.control_mode == 'cartesian':
+            self.get_logger().info(f"diddy booty jackson")
 
         if self.xarm.is_goal_valid(joints) == 0:
             self.newJoints = (joint0, joint1, joint2, joint3, joint4, joint5)
 
-        self.get_logger().info(f"X: {msg.axes[0]}, Y: {msg.axes[1]}")
+        # self.get_logger().info(f"X: {msg.axes[0]}, Y: {msg.axes[1]}")
 
 
 def main(args=None):
