@@ -26,6 +26,8 @@ setup(
     entry_points={
         'console_scripts': [
             "controller_subscriber = ourbeloved.controller_subscriber:main",
+            "fire_node = ourbeloved.fire_node:main",
+            "joint_state_node = ourbeloved.joint_state_node:main",
         ],
     },
 )
