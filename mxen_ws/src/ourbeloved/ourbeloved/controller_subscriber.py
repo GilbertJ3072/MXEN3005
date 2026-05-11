@@ -34,10 +34,11 @@ class ControllerSubscriber(Node):
             self.xarm.rest()
         #unrest
         if msg.buttons[1]: #circle
-            self.rest_mode = False
-            self.xarm.home()
-            time.sleep(2)
-            self.newJoints = self.xarm.get_joints()
+            if(self.rest_mode): #only do this if in rest mode - otherwise this becomes another homing button
+                self.rest_mode = False
+                self.xarm.home()
+                time.sleep(2)
+                self.newJoints = self.xarm.get_joints()
 
         #gripper toggle
         if msg.buttons[5]: #right bunmper
