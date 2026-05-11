@@ -1,3 +1,4 @@
+import copy
 import rclpy
 import time
 from rclpy.executors import ExternalShutdownException
@@ -6,6 +7,7 @@ from xarmclient import XArm
 
 from sensor_msgs.msg import Joy
 from std_msgs.msg import String
+from wx250s_kinematics import fk, ik
 
 
 class ControllerSubscriber(Node):
@@ -18,13 +20,31 @@ class ControllerSubscriber(Node):
         self.xarm = XArm()
         self.newJoints = self.xarm.get_joints()
         self.grip = 0
+        self.stick = [0,0,0,0,0,0,0,0]
+        self.stickFlag = False
+        self.driftFlag = False
         self.control_mode = 'joint'
 
     def timer_callback(self):
-        self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
+        self.stickFlag = False
+
+        for i in [0, 1, 3,4,6,7]:
+            if self.stick[i] != 0.0:
+                self.stickFlag = True
+                break
+
+        if self.stickFlag:
+            self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
+            self.driftFlag = True
+        else:
+            self.newJoints = self.xarm.get_joints()
+            if self.driftFlag:
+                self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
+                self.driftFlag = False
 
     def listener_callback(self, msg):
         #resting
+        self.stick = msg.axes
         #rest
         if msg.buttons[3]: #square
             self.xarm.rest()
@@ -52,12 +72,19 @@ class ControllerSubscriber(Node):
 
         # Joint control mode
         if self.control_mode == 'joint':
-            joint0 = msg.axes[0]+self.newJoints[0]
-            joint1 = msg.axes[1]+self.newJoints[1]
-            joint2 = msg.axes[4]+self.newJoints[2]
-            joint3 = msg.axes[3]+self.newJoints[3]
-            joint4 = msg.axes[7]+self.newJoints[4]
-            joint5 = msg.axes[6]+self.newJoints[5]
+            js0 = 3
+            js1 = 2
+            js2 = 1.5
+            js3 = 1
+            js4 = 1
+            js5 = 1
+
+            joint0 = js0*msg.axes[0]+self.newJoints[0]
+            joint1 = js1*msg.axes[1]+self.newJoints[1]
+            joint2 = js2*msg.axes[4]+self.newJoints[2]
+            joint3 = js3*msg.axes[3]+self.newJoints[3]
+            joint4 = js4*msg.axes[7]+self.newJoints[4]
+            joint5 = js5*msg.axes[6]+self.newJoints[5]
             
             joints = (joint0, joint1, joint2, joint3, joint4, joint5)
         
@@ -66,13 +93,13 @@ class ControllerSubscriber(Node):
 
         if self.control_mode == 'cartesian':
             self.get_logger().info(f"diddy booty jackson")
-            diff_x = msg.axes[3]
-            diff_y = msg.axes[4]
+            diff_x = msg.axes[4]
+            diff_y = msg.axes[3]
             diff_z = msg.axes[1]
 
             ik_joints = self.cartesian_mode(diff_x, diff_y, diff_z) 
 
-            if ik_joints is not None and self.xarm.is_goal_valid(joints) == 0:
+            if ik_joints is not None and self.xarm.is_goal_valid(ik_joints) == 0:
                 self.newJoints = ik_joints
             
             
@@ -86,12 +113,12 @@ class ControllerSubscriber(Node):
         prev_dist = 1000
         stuck_count = 0
         #actuate goal request 
-        present_joints = self.xarm.get_joints()
+        present_joints = self.newJoints
         present_htm, _ = fk(present_joints)
+        goal_htm = present_htm.copy()
         x = goal_htm[0,3]
         y = goal_htm[1,3]
         z = goal_htm[2,3] 
-        goal_htm = present_htm.copy()
         goal_htm[0,3] = x + diff_x
         goal_htm[1,3] = y + diff_y
         goal_htm[2,3] = z + diff_z
@@ -112,7 +139,7 @@ class ControllerSubscriber(Node):
     
             #these will be important later
             intermediate_htms = []
-            intermediate_angles = self.xarm.get_joints()
+            intermediate_angles = self.newJoints
             no_more_intermediate_frames_flag = False
     
     
