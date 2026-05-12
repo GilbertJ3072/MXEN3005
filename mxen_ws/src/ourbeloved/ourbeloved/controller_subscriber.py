@@ -5,42 +5,105 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from xarmclient import XArm
 
-from sensor_msgs.msg import Joy
+from sensor_msgs.msg import Joy, JointState
 from std_msgs.msg import String
 from wx250s_kinematics import fk, ik
+import numpy as np
 
 
 class ControllerSubscriber(Node):
-
     def __init__(self):
         super().__init__("controller_subscriber")
-        self.subscription = self.create_subscription(Joy, "joy", self.listener_callback, 10)
+        self.subscription1 = self.create_subscription(Joy, "joy", self.listener_callback, 10)
+        self.subscription2 = self.create_subscription(JointState, "precise_joints", self.precise_callback, 10)
         timer_period = 0.05
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.xarm = XArm()
         self.newJoints = self.xarm.get_joints()
         self.grip = 0
+        self.control_mode = 'joint'
         self.stick = [0,0,0,0,0,0,0,0]
         self.stickFlag = False
         self.driftFlag = False
-        self.control_mode = 'joint'
+        self.tune_vel = (45,)*6
+        # precise movement
+        self.within_tolerance = True
+        self.within_count = 0
+        self.try_count = 0
+        self.tolerance = 0.1
+        self.pi_threshold = 0.5
+        self.goal_joints = list(self.xarm.get_joints())
+        self.actual_goal_joints = list(self.xarm.get_joints())
+        # PI
+        self.integral = [0.0] * 6
+        self.prev_errors = [0.0] * 6  # add this line to __init__
+        self.kp = 0.5
+        self.ki = 0.2
+        self.integral_clamp = 50.0
+
+    def precise_callback(self, msg):
+        self.within_tolerance = False
+        self.within_count = 0
+        self.try_count = 0
+        self.integral = [0.0] * 6
+        self.prev_errors = [0.0] * 6
+        self.actual_goal_joints = list(msg.position)
+        self.goal_joints = list(msg.position)
 
     def timer_callback(self):
-        self.stickFlag = False
+        if not self.within_tolerance:
+            cur_joints = self.xarm.get_joints()
+            errors = [self.actual_goal_joints[i] - cur_joints[i] for i in range(6)]
+            problem_joints = [i for i in range(6) if abs(errors[i]) > self.tolerance]
 
-        for i in [0, 1, 3,4,6,7]:
+            self.get_logger().info(f"errors: {[f'{e:.3f}' for e in errors]} | pjs: {problem_joints}")
+
+            if len(problem_joints) == 0:
+                self.within_count += 1
+                if self.within_count >= 5:
+                    self.within_tolerance = True
+                    self.within_count = 0
+                    self.get_logger().info("Goal reached within tolerance")
+            elif self.stickFlag:
+                self.within_tolerance = True
+                self.within_count = 0
+            else:
+                self.within_count = 0
+                self.try_count += 1
+
+                # initial move - get arm in the ballpark first
+                if self.try_count == 1:
+                    self.xarm.set_joints(tuple(self.actual_goal_joints), motion_mode='high_acc', velocities=[30]*6)
+                else:
+                    for i in range(6):
+                        self.integral[i] = np.clip(
+                            self.integral[i] + errors[i],
+                            -self.integral_clamp,
+                            self.integral_clamp
+                        )
+
+                    for i in problem_joints:
+                        correction = self.kp * errors[i] + self.ki * self.integral[i]
+                        self.goal_joints[i] = self.actual_goal_joints[i] + correction
+
+                    self.xarm.set_joints(tuple(self.goal_joints), motion_mode='high_acc', velocities=[30]*6)
+
+                if self.try_count % 20 == 0:
+                    self.get_logger().info(
+                        f"PI correction | errors: {[f'{e:.3f}' for e in errors]}"
+                        f" | integral: {[f'{v:.3f}' for v in self.integral]}"
+                        f" | goal: {[f'{v:.3f}' for v in self.goal_joints]}"
+                    )
+
+        self.stickFlag = False
+        for i in [0, 1, 3, 4, 6, 7]:
             if self.stick[i] != 0.0:
                 self.stickFlag = True
                 break
 
         if self.stickFlag:
-            self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
+            self.xarm.set_joints(self.newJoints, motion_mode='high_acc', velocities=self.tune_vel)
             self.driftFlag = True
-        else:
-            self.newJoints = self.xarm.get_joints()
-            if self.driftFlag:
-                self.xarm.set_joints(self.newJoints, motion_mode='high_acc')
-                self.driftFlag = False
 
     def listener_callback(self, msg):
         #resting
@@ -72,9 +135,9 @@ class ControllerSubscriber(Node):
 
         # Joint control mode
         if self.control_mode == 'joint':
-            js0 = 3
-            js1 = 2
-            js2 = 1.5
+            js0 = 1
+            js1 = 1
+            js2 = 1
             js3 = 1
             js4 = 1
             js5 = 1

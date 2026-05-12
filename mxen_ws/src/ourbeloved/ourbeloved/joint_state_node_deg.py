@@ -5,11 +5,11 @@ from xarmclient import XArm
 from sensor_msgs.msg import JointState
 import numpy as np
 
-class joint_state_node(Node):
+class joint_state_node_deg(Node):
 
     def __init__(self):
-        super().__init__("joint_state_node")
-        self.publisher = self.create_publisher(JointState, "joint_state", 10) 
+        super().__init__("joint_state_node_deg")
+        self.publisher = self.create_publisher(JointState, "joint_state_deg", 10) 
         timer_period = 0.2  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.xarm = XArm()
@@ -17,11 +17,7 @@ class joint_state_node(Node):
     def timer_callback(self):
         p = self.xarm.get_joints()
         P = [p[0], p[1], p[2], p[3], p[4], p[5]]
-        for i in range(len(P)):
-            P[i] = P[i] *3.141592/180
         msg = JointState()
-        NameList = ["joint1", "joint2", "joint3", "joint4", "joint5", "joint6"]
-        msg.name = np.array(NameList)
         msg.position = np.array(P)
         self.publisher.publish(msg)
         #self.get_logger().info(f"Position: {msg.position}")
@@ -30,7 +26,7 @@ class joint_state_node(Node):
 def main(args=None):
     try:
         with rclpy.init(args=args):
-            node = joint_state_node()
+            node = joint_state_node_deg()
             rclpy.spin(node)
 
     except (KeyboardInterrupt, ExternalShutdownException):
