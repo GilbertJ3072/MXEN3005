@@ -1,0 +1,7 @@
+<launch>
+<executable cmd="/usr/bin/env xarmserver"/>
+    <node pkg="ourbeloved" exec="controller_subscriber"/>
+    <node pkg="ourbeloved" exec="fire_node"/>
+    <node pkg="ourbeloved" exec="joint_state_node"/>
+    <node pkg="ourbeloved" exec="joint_state_node_deg"/>
+</launch>

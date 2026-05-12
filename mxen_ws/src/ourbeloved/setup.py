@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'ourbeloved'
 
@@ -10,6 +12,10 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*')),
+        (os.path.join('share', package_name, 'urdf'), glob('urdf/*')),
+        (os.path.join("share", package_name, "mesh"), glob("mesh/*")),
+        (os.path.join('share', package_name, 'config'), glob('config/*')),
     ],
     package_data={'': ['py.typed']},
     install_requires=['setuptools'],
@@ -28,6 +34,7 @@ setup(
             "controller_subscriber = ourbeloved.controller_subscriber:main",
             "fire_node = ourbeloved.fire_node:main",
             "joint_state_node = ourbeloved.joint_state_node:main",
+            "joint_state_node_deg = ourbeloved.joint_state_node_deg:main",
         ],
     },
 )
