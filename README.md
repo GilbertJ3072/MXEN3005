@@ -24,11 +24,12 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 | Dependency | Purpose |
 |---|---|
 | `rclpy` | ROS2 Python client library |
-| `xarmclient` | Hardware interface for the wx250s arm |
+| `xarmclient` | Provides commands to interface with the wx250s arm |
+| `xarmserver` | Provides a server for hardware control of the wx250s arm |
 | `wx250s_kinematics` | Forward (`fk`) and inverse (`ik`) kinematics for the wx250s |
 | `sensor_msgs` | `Joy`, `JointState` message types |
 | `std_msgs` | `Bool` message type |
-| `numpy` | Numerical operations |
+| `numpy` | Array operations |
 | `joy` (ROS2 pkg) | PS4 controller driver — publishes to `/joy` |
 | `robot_state_publisher` | Publishes URDF TF tree for visualisation |
 | `joint_state_publisher` | Aggregates joint states for RViz |
@@ -37,6 +38,7 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 ---
 
 ## Package Structure
+Below is a simplified package tree of the project.
 
 ```
 .
