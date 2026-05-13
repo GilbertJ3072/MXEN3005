@@ -1,4 +1,4 @@
-# MXEN3005_FinalProject
+# MXEN3005 - Robot Manipulation Project - Final Project
 
 A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS4 controller. Supports real-time **joint** and **cartesian** control, autonomous **precise joint positioning** via a PI controller, and a **fire trigger** node that publishes to a fire topic based on controller input.
 
