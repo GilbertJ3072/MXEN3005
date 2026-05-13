@@ -29,81 +29,89 @@ class ControllerSubscriber(Node):
         # precise movement
         self.within_tolerance = True
         self.within_count = 0
-        self.try_count = 0
         self.tolerance = 0.1
         self.pi_threshold = 0.5
         self.goal_joints = list(self.xarm.get_joints())
         self.actual_goal_joints = list(self.xarm.get_joints())
+        self.prev_joints = list(self.xarm.get_joints())
         # PI
         self.integral = [0.0] * 6
         self.prev_errors = [0.0] * 6  # add this line to __init__
         self.kp = 0.5
         self.ki = 0.2
         self.integral_clamp = 50.0
+        self.phase = 'initial'  # 'initial' | 'moving' | 'controller'
 
     def precise_callback(self, msg):
         self.within_tolerance = False
         self.within_count = 0
-        self.try_count = 0
         self.integral = [0.0] * 6
         self.prev_errors = [0.0] * 6
         self.actual_goal_joints = list(msg.position)
         self.goal_joints = list(msg.position)
+        self.prev_joints = list(msg.position)
+        self.settled_count = 0
+        self.phase = 'initial'
+        self.control_mode = 'joints'
 
     def timer_callback(self):
         if not self.within_tolerance:
             cur_joints = self.xarm.get_joints()
             errors = [self.actual_goal_joints[i] - cur_joints[i] for i in range(6)]
             problem_joints = [i for i in range(6) if abs(errors[i]) > self.tolerance]
-
             self.get_logger().info(f"errors: {[f'{e:.3f}' for e in errors]} | pjs: {problem_joints}")
 
             if len(problem_joints) == 0:
                 self.within_count += 1
                 if self.within_count >= 5:
                     self.within_tolerance = True
-                    self.within_count = 0
                     self.get_logger().info("Goal reached within tolerance")
             elif self.stickFlag:
                 self.within_tolerance = True
-                self.within_count = 0
             else:
                 self.within_count = 0
-                self.try_count += 1
 
-                # initial move - get arm in the ballpark first
-                if self.try_count == 1:
+                if self.phase == 'initial':
                     self.xarm.set_joints(tuple(self.actual_goal_joints), motion_mode='high_acc', velocities=[30]*6)
-                else:
+                    self.phase = 'moving'
+
+                elif self.phase == 'moving':
+                    movement = [abs(cur_joints[i] - self.prev_joints[i]) for i in range(6)]
+                    if all(m <= 0.2 for m in movement):
+                        self.settled_count += 1
+                        if self.settled_count >= 5:
+                            self.phase = 'pi'
+                            self.integral = [0.0] * 6
+                            self.settled_count = 0
+                    else:
+                        self.settled_count = 0
+                    self.prev_joints = cur_joints
+
+                elif self.phase == 'pi':
                     for i in range(6):
                         self.integral[i] = np.clip(
                             self.integral[i] + errors[i],
                             -self.integral_clamp,
                             self.integral_clamp
                         )
-
                     for i in problem_joints:
                         correction = self.kp * errors[i] + self.ki * self.integral[i]
                         self.goal_joints[i] = self.actual_goal_joints[i] + correction
-
                     self.xarm.set_joints(tuple(self.goal_joints), motion_mode='high_acc', velocities=[30]*6)
 
-                if self.try_count % 20 == 0:
-                    self.get_logger().info(
-                        f"PI correction | errors: {[f'{e:.3f}' for e in errors]}"
-                        f" | integral: {[f'{v:.3f}' for v in self.integral]}"
-                        f" | goal: {[f'{v:.3f}' for v in self.goal_joints]}"
-                    )
 
-        self.stickFlag = False
-        for i in [0, 1, 3, 4, 6, 7]:
-            if self.stick[i] != 0.0:
-                self.stickFlag = True
-                break
-
+        self.stickFlag = any(self.stick[i] != 0.0 for i in [0, 1, 3, 4, 6, 7])
         if self.stickFlag:
-            self.xarm.set_joints(self.newJoints, motion_mode='high_acc', velocities=self.tune_vel)
+            if self.control_mode == 'cartesian':
+                self.xarm.set_joints(self.newJoints)
+            else:
+                self.xarm.set_joints(self.newJoints, motion_mode='high_acc', velocities=self.tune_vel)
             self.driftFlag = True
+        if not self.stickFlag:
+            self.newJoints = self.xarm.get_joints()
+            if self.driftFlag:
+                self.xarm.set_joints(self.newJoints)
+                self.driftFlag = False
 
     def listener_callback(self, msg):
         #resting
@@ -115,10 +123,10 @@ class ControllerSubscriber(Node):
             self.newJoints = self.xarm.get_joints()
 
         #gripper toggle
-        if msg.buttons[5]: #right bunmper
-            self.xarm.grip(1)
-        else:
-            self.xarm.grip(0)
+      #  if msg.buttons[5]: #right bunmper
+      #      self.xarm.grip(1)
+      #  else:
+      #      self.xarm.grip(0)
 
         
         #homing button
@@ -135,6 +143,9 @@ class ControllerSubscriber(Node):
 
         # Joint control mode
         if self.control_mode == 'joint':
+            self.tune_vel = (40,)*6
+            self.get_logger().info(f"Joint Mode")
+
             js0 = 1
             js1 = 1
             js2 = 1
@@ -155,7 +166,8 @@ class ControllerSubscriber(Node):
                 self.newJoints = (joint0, joint1, joint2, joint3, joint4, joint5)
 
         if self.control_mode == 'cartesian':
-            self.get_logger().info(f"diddy booty jackson")
+            self.tune_vel = (10,)*6
+            self.get_logger().info(f"Cartesian Mode")
             diff_x = msg.axes[4]
             diff_y = msg.axes[3]
             diff_z = msg.axes[1]
@@ -176,7 +188,7 @@ class ControllerSubscriber(Node):
         prev_dist = 1000
         stuck_count = 0
         #actuate goal request 
-        present_joints = self.newJoints
+        present_joints = [0,0,0,0,0,0]
         present_htm, _ = fk(present_joints)
         goal_htm = present_htm.copy()
         x = goal_htm[0,3]
@@ -209,7 +221,6 @@ class ControllerSubscriber(Node):
             #while distance between goal and current pos is greater than 0.5 in any cartesian direction, inch the x, y, z closer by 0.5 until in range; save all intermediate frames in array
             #maybe change from 0.5?
             while not no_more_intermediate_frames_flag:
-                self.get_logger().info(f"{initial_x}, {initial_y}, {initial_z}")
                 no_more_intermediate_frames_flag = True
     
                 if(abs(final_x - initial_x) > 2):
@@ -232,13 +243,10 @@ class ControllerSubscriber(Node):
     
             intermediate_htms.append(goal_htm.copy()) #goal htm is the last fk function to call so goes at end of list
     
-            self.get_logger().info(f"HTMS: {intermediate_htms}\nnumber:{len(intermediate_htms)}")
     
     
             for i in range(len(intermediate_htms)):
                 intermediate_angles = ik(intermediate_angles, intermediate_htms[i])
-                self.get_logger().info(f"IK{i}/{len(intermediate_htms)}: {intermediate_angles}")
-                self.get_logger().info(f"after")
     
     
                 if intermediate_angles is None: #if impossible kinematics step

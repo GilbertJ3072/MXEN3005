@@ -17,14 +17,16 @@ class fire_node(Node):
         self.pressed = False
 
     def listener_callback(self, msg):
-        if msg.buttons[5]:
+        if msg.buttons[5] and self.pressed == False:
             msg = Bool()
             msg.data = True
             self.publisher.publish(msg)
-        else:
+            self.pressed = True
+        elif not msg.buttons[5] and self.pressed == True:
             msg = Bool()
             msg.data = False
             self.publisher.publish(msg)
+            self.pressed = False
         
 
 
