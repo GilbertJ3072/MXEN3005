@@ -11,8 +11,8 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 - [Launch Files](#launch-files)
 - [Nodes](#nodes)
 - [Control Scheme](#control-scheme)
-  - [Joint Control Mode](#joint-control-mode)
-  - [Cartesian Control Mode](#cartesian-control-mode)
+  - [Joint Control Scheme](#joint-control-scheme)
+  - [Cartesian Control Scheme](#cartesian-control-scheme)
   - [Precise Joint Positioning](#precise-joint-positioning)
   - [Fire Node](#fire-node)
 - [ROS2 Topics](#ros2-topics)
@@ -36,7 +36,7 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 
 ---
 
-## Condensed Package Structure
+## Package Structure
 
 ```
 .
@@ -165,7 +165,7 @@ When no stick input is detected, the node reads back the arm's actual position a
 
 ---
 
-### Cartesian Control Mode
+### Cartesian Control Scheme
 
 > Activated by pressing **Share**.
 
