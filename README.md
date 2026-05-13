@@ -9,6 +9,8 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 - [Dependencies](#dependencies)
 - [Package Structure](#package-structure)
 - [Launch Files](#launch-files)
+  - [Cannon](#`ourbeloved_cannon.xml`-—-Main-Arm-Launch)
+  - [Controller](#`ourbeloved_controller.xml`-—-Controller-+-Visualisation-Launch)
 - [Nodes](#nodes)
 - [Control Scheme](#control-scheme)
   - [Joint Control Mode](#joint-control-mode)
@@ -16,7 +18,6 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
   - [Precise Joint Positioning](#precise-joint-positioning)
   - [Fire Node](#fire-node)
 - [ROS2 Topics](#ros2-topics)
-- [Known Issues / Notes](#known-issues--notes)
 
 ---
 
