@@ -43,16 +43,20 @@ class ControllerSubscriber(Node):
         self.phase = 'initial'  # 'initial' | 'moving' | 'controller'
 
     def precise_callback(self, msg):
-        self.within_tolerance = False
-        self.within_count = 0
-        self.integral = [0.0] * 6
-        self.prev_errors = [0.0] * 6
-        self.actual_goal_joints = list(msg.position)
-        self.goal_joints = list(msg.position)
-        self.prev_joints = list(msg.position)
-        self.settled_count = 0
-        self.phase = 'initial'
-        self.control_mode = 'joints'
+        goal_validity = self.xarm.is_goal_valid(tuple(msg.position))
+        if(goal_validity==0):
+            self.within_tolerance = False
+            self.within_count = 0
+            self.integral = [0.0] * 6
+            self.prev_errors = [0.0] * 6
+            self.actual_goal_joints = list(msg.position)
+            self.goal_joints = list(msg.position)
+            self.prev_joints = list(msg.position)
+            self.settled_count = 0
+            self.phase = 'initial'
+            self.control_mode = 'joints'
+        else:
+            self.get_logger().info(f"Recieved invalid joint request {msg.position}\n Error State {goal_validity}")
 
     def timer_callback(self):
         if not self.within_tolerance:
