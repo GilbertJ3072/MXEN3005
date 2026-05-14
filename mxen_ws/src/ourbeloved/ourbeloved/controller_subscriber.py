@@ -41,6 +41,8 @@ class ControllerSubscriber(Node):
         self.ki = 0.2
         self.integral_clamp = 50.0
         self.phase = 'initial'  # 'initial' | 'moving' | 'controller'
+        # Cartesian
+        self.ref_htm, _ = fk(self.xarm.get_joints())
 
     def precise_callback(self, msg):
         goal_validity = self.xarm.is_goal_valid(tuple(msg.position))
@@ -141,6 +143,8 @@ class ControllerSubscriber(Node):
 
         if msg.buttons[8]:
             self.control_mode = 'cartesian'
+            self.ref_htm, _ = fk(self.xarm.get_joints())
+            
         
         if msg.buttons[9]:
             self.control_mode = 'joint'
@@ -170,7 +174,7 @@ class ControllerSubscriber(Node):
                 self.newJoints = (joint0, joint1, joint2, joint3, joint4, joint5)
 
         if self.control_mode == 'cartesian':
-            self.tune_vel = (10,)*6
+            self.tune_vel = (30,)*6
             self.get_logger().info(f"Cartesian Mode")
             diff_x = msg.axes[4]
             diff_y = msg.axes[3]
@@ -187,24 +191,25 @@ class ControllerSubscriber(Node):
         # self.get_logger().info(f"X: {msg.axes[0]}, Y: {msg.axes[1]}")
 
     def cartesian_mode(self, diff_x, diff_y, diff_z):
-        #log that goal is being executed
-        prev_joints = [1000, 1000, 1000, 1000, 1000, 1000]
-        prev_dist = 1000
-        stuck_count = 0
-        #actuate goal request 
-        present_joints = self.newJoints
-        present_htm, _ = fk(present_joints)
-        goal_htm = present_htm.copy()
-        x = goal_htm[0,3]
-        y = goal_htm[1,3]
-        z = goal_htm[2,3] 
-        goal_htm[0,3] = x + diff_x
-        goal_htm[1,3] = y + diff_y
-        goal_htm[2,3] = z + diff_z
-        
-        goal_joints = self.ik_intermediate_step(present_htm, goal_htm)
 
-        return goal_joints  
+        rotation_htm = self.ref_htm.copy()
+        present_htm, _ = fk(self.newJoints)
+        goal_htm = present_htm.copy()
+
+        rot_mat = rotation_htm[0:3,0:3]
+
+        diff_xyz = np.array([diff_x, diff_y, diff_z])
+
+        rot_diff_xyz = rot_mat @ diff_xyz
+
+        goal_htm[0:3,3] += rot_diff_xyz
+        
+        goal_joints = self.ik_intermediate_step(
+            present_htm,
+            goal_htm
+        )
+
+        return goal_joints
     
     def ik_intermediate_step(self, present_htm, goal_htm):
             """break path from current pos to end goal into smaller steps for numerical ik. returns None for impossible inverse kinematics step"""
