@@ -7,7 +7,7 @@ from xarmclient import XArm
 
 from sensor_msgs.msg import Joy, JointState
 from std_msgs.msg import String
-from wx250s_kinematics import fk, ik
+from ourbeloved.wx250s_kinematics import fk, ik
 import numpy as np
 
 
@@ -154,10 +154,10 @@ class ControllerSubscriber(Node):
             js5 = 1
 
             joint0 = js0*msg.axes[0]+self.newJoints[0]
-            joint1 = js1*msg.axes[1]+self.newJoints[1]
+            joint1 = js1*msg.axes[7]+self.newJoints[1]
             joint2 = js2*msg.axes[4]+self.newJoints[2]
             joint3 = js3*msg.axes[3]+self.newJoints[3]
-            joint4 = js4*msg.axes[7]+self.newJoints[4]
+            joint4 = js4*msg.axes[1]+self.newJoints[4]
             joint5 = js5*msg.axes[6]+self.newJoints[5]
             
             joints = (joint0, joint1, joint2, joint3, joint4, joint5)
@@ -188,7 +188,7 @@ class ControllerSubscriber(Node):
         prev_dist = 1000
         stuck_count = 0
         #actuate goal request 
-        present_joints = [0,0,0,0,0,0]
+        present_joints = self.newJoints
         present_htm, _ = fk(present_joints)
         goal_htm = present_htm.copy()
         x = goal_htm[0,3]
