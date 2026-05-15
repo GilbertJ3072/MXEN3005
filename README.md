@@ -26,7 +26,6 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 | `rclpy` | ROS2 Python client library |
 | `xarmclient` | Provides commands to interface with the wx250s arm |
 | `xarmserver` | Provides a server for hardware control of the wx250s arm |
-| `wx250s_kinematics` | Forward (`fk`) and inverse (`ik`) kinematics for the wx250s |
 | `sensor_msgs` | `Joy`, `JointState` message types |
 | `std_msgs` | `Bool` message type |
 | `numpy` | Array operations |
@@ -50,12 +49,14 @@ Below is a simplified package tree of the project.
             │   └── wx250s_viz.rviz
             ├── launch
             │   ├── ourbeloved_cannon.xml
-            │   └── ourbeloved_controller.xml
+            │   ├── ourbeloved_controller.xml
+            │   └── ourbeloved_sim.xml
             ├── ourbeloved
             │   ├── controller_subscriber.py
             │   ├── fire_node.py
             │   ├── __init__.py
             │   ├── joint_state_node_deg.py
+            │   ├── wx250s_kinematics.py
             │   ├── joint_state_node.py
             │   └── py.typed
             ├── package.xml
@@ -100,6 +101,23 @@ Launches:
 - `robot_state_publisher` — broadcasts URDF transforms
 - `joint_state_publisher` — sources from `/joint_state` topic
 - `rviz2` — 3D visualisation
+
+### `ourbeloved_sim.xml` — Dedicated Sim Launch
+
+For running the arm on the dedicated simulator. Does not run the RViz as visualization is already done by the sim.
+
+```bash
+ros2 launch ourbeloved ourbeloved_sim.xml
+```
+
+Launches:
+- `joy_node` — PS4 controller driver
+- `xarmserver_sim` — server for the wx250s simulator
+- `controller_subscriber` — teleoperation node
+- `fire_node` — trigger node
+- `joint_state_node` — joint state publisher (radians)
+- `joint_state_node_deg` — joint state publisher (degrees)
+
 
 ---
 
@@ -155,10 +173,10 @@ Each analog stick axis directly offsets one joint angle. The commanded joint pos
 | Stick / D-Pad | Joint |
 |---|---|
 | Left Stick X | Joint 0 — base yaw |
-| Left Stick Y | Joint 1 — shoulder |
+| Left Stick Y | Joint 4 — wrist pitch |
 | Right Stick Y | Joint 2 — elbow |
 | Right Stick X | Joint 3 — forearm roll |
-| D-Pad Y | Joint 4 — wrist pitch |
+| D-Pad Y | Joint 1 — shoulder |
 | D-Pad X | Joint 5 — wrist roll |
 
 Commands are sent with `motion_mode='high_acc'` at **40 deg/s** per joint. Goal validity is checked before applying any new joint target — invalid goals (out-of-range or self-collision) are silently rejected.
@@ -204,6 +222,9 @@ ros2 topic pub --once /precise_joints sensor_msgs/msg/JointState "{position: [j0
 4. **Done** — once all joints are within **±0.1°** of goal for 5 consecutive cycles, positioning completes and normal controller input resumes.
 
 If the user moves a stick during precise positioning, the autonomous phase is immediately aborted.
+
+Key positions:
+- Attack Mode: [0, 80, -50, 0, -30, 0] or [0, 80, -20, 0, -60, 0] depending on the desired height. This is meant to fix the end effector at (0,0) on the (x,y) plane for controlling during the minigame.
 
 ---
 
