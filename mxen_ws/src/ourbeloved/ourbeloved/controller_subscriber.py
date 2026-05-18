@@ -151,6 +151,9 @@ class ControllerSubscriber(Node):
         if msg.buttons[9]:
             self.control_mode = 'joint'
 
+        if msg.buttons[0]:
+            self.control_mode = 'attack'
+
         # Joint control mode
         if self.control_mode == 'joint':
             self.get_logger().info(f"Joint Mode Active")
@@ -169,6 +172,22 @@ class ControllerSubscriber(Node):
             joint3 = js3*msg.axes[3]+self.newJoints[3]
             joint4 = js4*msg.axes[1]+self.newJoints[4]
             joint5 = js5*msg.axes[6]+self.newJoints[5]
+            
+            joints = (joint0, joint1, joint2, joint3, joint4, joint5)
+        
+            if self.xarm.is_goal_valid(joints) == 0:
+                self.newJoints = (joint0, joint1, joint2, joint3, joint4, joint5)
+
+        if self.control_mode == 'attack':
+            self.get_logger().info(f"Attack Mode Active")
+            self.tune_vel = (40,)*6
+
+            joint0 = msg.axes[0]+self.newJoints[0]
+            joint1 = 70
+            joint2 = -20
+            joint3 = 0
+            joint4 = msg.axes[1]+self.newJoints[4]
+            joint5 = 0
             
             joints = (joint0, joint1, joint2, joint3, joint4, joint5)
         
