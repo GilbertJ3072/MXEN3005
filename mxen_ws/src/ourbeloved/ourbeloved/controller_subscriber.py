@@ -7,7 +7,7 @@ from xarmclient import XArm
 
 from sensor_msgs.msg import Joy, JointState
 from std_msgs.msg import String
-from ourbeloved.wx250s_kinematics import fk, ik
+from wx250s_kinematics import fk, ik
 import numpy as np
 
 
@@ -124,6 +124,7 @@ class ControllerSubscriber(Node):
         self.stick = msg.axes
         #rest
         if msg.buttons[3]: #square
+            self.get_logger().info(f"Resting...")
             self.xarm.rest()
             time.sleep(2)
             self.newJoints = self.xarm.get_joints()
@@ -137,6 +138,7 @@ class ControllerSubscriber(Node):
         
         #homing button
         if msg.buttons[10]: #domer
+            self.get_logger().info(f"Homing...")
             self.xarm.home()
             time.sleep(2)
             self.newJoints = self.xarm.get_joints()
@@ -151,8 +153,8 @@ class ControllerSubscriber(Node):
 
         # Joint control mode
         if self.control_mode == 'joint':
+            self.get_logger().info(f"Joint Mode Active")
             self.tune_vel = (40,)*6
-            self.get_logger().info(f"Joint Mode")
 
             js0 = 1
             js1 = 1
@@ -174,8 +176,7 @@ class ControllerSubscriber(Node):
                 self.newJoints = (joint0, joint1, joint2, joint3, joint4, joint5)
 
         if self.control_mode == 'cartesian':
-            self.tune_vel = (30,)*6
-            self.get_logger().info(f"Cartesian Mode")
+            self.get_logger().info(f"Cartesian Mode Active")
             diff_x = msg.axes[4]
             diff_y = msg.axes[3]
             diff_z = msg.axes[1]

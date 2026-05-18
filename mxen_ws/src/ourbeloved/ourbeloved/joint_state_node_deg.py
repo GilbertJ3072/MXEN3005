@@ -10,7 +10,7 @@ class joint_state_node_deg(Node):
     def __init__(self):
         super().__init__("joint_state_node_deg")
         self.publisher = self.create_publisher(JointState, "joint_state_deg", 10) 
-        timer_period = 1/30 # seconds
+        timer_period = 1/20 # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.xarm = XArm()
 
