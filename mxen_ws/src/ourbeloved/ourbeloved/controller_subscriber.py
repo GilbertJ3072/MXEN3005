@@ -182,11 +182,11 @@ class ControllerSubscriber(Node):
             self.get_logger().info(f"Attack Mode Active")
             self.tune_vel = (40,)*6
 
-            joint0 = msg.axes[0]+self.newJoints[0]
+            joint0 = msg.axes[3]+self.newJoints[0]
             joint1 = 70
             joint2 = -20
             joint3 = 0
-            joint4 = msg.axes[1]+self.newJoints[4]
+            joint4 = msg.axes[4]+self.newJoints[4]
             joint5 = 0
             
             joints = (joint0, joint1, joint2, joint3, joint4, joint5)
