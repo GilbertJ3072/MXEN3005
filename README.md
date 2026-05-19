@@ -13,6 +13,7 @@ A ROS2 package (`ourbeloved`) for operation of a **wx250s 6-DOF arm** using a PS
 - [Control Scheme](#control-scheme)
   - [Joint Control Scheme](#joint-control-scheme)
   - [Cartesian Control Scheme](#cartesian-control-scheme)
+  - [Attack Control Scheme](#attack-control-scheme)
   - [Precise Joint Positioning](#precise-joint-positioning)
   - [Fire Node](#fire-node)
 - [ROS2 Topics](#ros2-topics)
@@ -45,18 +46,15 @@ Below is a simplified package tree of the project.
     └── src
         └── ourbeloved
             ├── config
-            │   ├── wx250s.rviz
             │   └── wx250s_viz.rviz
             ├── launch
             │   ├── ourbeloved_cannon.xml
-            │   ├── ourbeloved_controller.xml
-            │   └── ourbeloved_sim.xml
+            │   └── ourbeloved_controller.xml
             ├── ourbeloved
             │   ├── controller_subscriber.py
             │   ├── fire_node.py
             │   ├── __init__.py
             │   ├── joint_state_node_deg.py
-            │   ├── wx250s_kinematics.py
             │   ├── joint_state_node.py
             │   └── py.typed
             ├── package.xml
@@ -102,22 +100,6 @@ Launches:
 - `joint_state_publisher` — sources from `/joint_state` topic
 - `rviz2` — 3D visualisation
 
-### `ourbeloved_sim.xml` — Dedicated Sim Launch
-
-For running the arm on the dedicated simulator. Does not run the RViz as visualization is already done by the sim.
-
-```bash
-ros2 launch ourbeloved ourbeloved_sim.xml
-```
-
-Launches:
-- `joy_node` — PS4 controller driver
-- `xarmserver_sim` — server for the wx250s simulator
-- `controller_subscriber` — teleoperation node
-- `fire_node` — trigger node
-- `joint_state_node` — joint state publisher (radians)
-- `joint_state_node_deg` — joint state publisher (degrees)
-
 
 ---
 
@@ -125,7 +107,7 @@ Launches:
 
 ### `controller_subscriber`
 
-The primary teleoperation node. Subscribes to the `/joy` topic and translates PS4 inputs into arm commands. Supports two real-time control modes (joint and Cartesian) and a separate autonomous precise-positioning mode driven by an external topic.
+The primary teleoperation node. Subscribes to the `/joy` topic and translates PS4 inputs into arm commands. Supports three real-time control modes (joint, Cartesian and Attack) and a separate autonomous precise-positioning mode driven by an external topic.
 
 **Subscriptions:**
 - `/joy` (`sensor_msgs/Joy`) — PS4 controller input
@@ -146,7 +128,7 @@ Monitors the R1 button and publishes a rising/falling edge `Bool` to the `/fire`
 
 ### `joint_state_node`
 
-Reads joint positions from the arm at 30 Hz and publishes them in **radians** for use by `robot_state_publisher` and RViz.
+Reads joint positions from the arm at 20 Hz and publishes them in **radians** for use by `robot_state_publisher` and RViz.
 
 **Publishes:** `/joint_state` (`sensor_msgs/JointState`)
 
@@ -203,6 +185,21 @@ The path from the current pose to the goal is broken into intermediate steps of 
 
 Commands run at **10 deg/s** per joint to allow smoother Cartesian paths.
 
+### Attack Control Scheme
+
+> Activated by pressing **X**.
+
+In Attack Mode, the arm is positioned so that the end effector and the base lie on the same vertical line. In this mode only joints 0 and 4 can be manupulated while all other joints are fixed, allowing for intuitive control of the arm in a first person perspective.
+
+**Stick assignments:**
+
+| Stick | Cartesian Axis |
+|---|---|
+| Right Stick Y | Pitch (up/down) |
+| Right Stick X | Yaw (left/right) |
+
+This mode is intended to be used in the demonstration section of the assignment. It is useful to call precise joints and move to the "attack mode" position prior to entering attack mode.
+
 ---
 
 ### Precise Joint Positioning
@@ -224,7 +221,11 @@ ros2 topic pub --once /precise_joints sensor_msgs/msg/JointState "{position: [j0
 If the user moves a stick during precise positioning, the autonomous phase is immediately aborted.
 
 Key positions:
-- Attack Mode: [0, 80, -50, 0, -30, 0] or [0, 80, -20, 0, -60, 0] depending on the desired height. This is meant to fix the end effector at (0,0) on the (x,y) plane for controlling during the minigame.
+- Attack Mode: This is intended to be called before entering attack mode.
+
+```bash
+ros2 topic pub --once /precise_joints sensor_msgs/msg/JointState "{position: [0, 70, -20, 0, -50, 0]}"
+```
 
 ---
 
