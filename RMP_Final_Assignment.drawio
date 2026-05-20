@@ -389,7 +389,7 @@
         <mxCell id="P4amnMT8XvO0oYf_1QA_-9" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="P4amnMT8XvO0oYf_1QA_-8" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="qDVKCfkhQNzgnCwjpLrE-5" parent="qDVKCfkhQNzgnCwjpLrE-1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="&lt;div&gt;Controller axes data&lt;/div&gt;and current HTM from current goal joints" vertex="1">
+        <mxCell id="qDVKCfkhQNzgnCwjpLrE-5" parent="qDVKCfkhQNzgnCwjpLrE-1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Save&lt;div&gt;Controller axes data&lt;/div&gt;and current HTM from current goal joints" vertex="1">
           <mxGeometry height="60" width="147.5" x="66.25" y="160" as="geometry" />
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-8" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-14" value="">
@@ -423,8 +423,8 @@
         <mxCell id="P4amnMT8XvO0oYf_1QA_-11" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="P4amnMT8XvO0oYf_1QA_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="P4amnMT8XvO0oYf_1QA_-10" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="P4amnMT8XvO0oYf_1QA_-8" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="Calculate goal HTM using controller input as&amp;nbsp;&lt;span class=&quot;BxUVEf ILfuVd&quot; lang=&quot;en&quot;&gt;&lt;span class=&quot;hgKElc pOOWX&quot;&gt;Δ&lt;/span&gt;&lt;/span&gt;x,y,z from current HTM position and saved reference rotation matrix as such" vertex="1">
-          <mxGeometry height="90" width="130" x="240" y="145" as="geometry" />
+        <mxCell id="P4amnMT8XvO0oYf_1QA_-8" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;Calculate goal HTM.&lt;/b&gt;&lt;/div&gt;&lt;div&gt;- position: controller as&amp;nbsp;&lt;span class=&quot;BxUVEf ILfuVd&quot; lang=&quot;en&quot;&gt;&lt;span class=&quot;hgKElc pOOWX&quot;&gt;Δ&lt;/span&gt;&lt;/span&gt;x,y,z from current cartesian position&lt;/div&gt;&lt;div&gt;- rotation matrix as the saved &lt;i&gt;reference&amp;nbsp;rotation matrix&lt;/i&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="130" x="240" y="130" as="geometry" />
         </mxCell>
         <mxCell id="P4amnMT8XvO0oYf_1QA_-12" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="P4amnMT8XvO0oYf_1QA_-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-12" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -449,7 +449,7 @@
         <mxCell id="5F47Ufk56tWmMxulwSTR-8" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-7" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-5" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;" value="Inputted position Joint Goal" vertex="1">
+        <mxCell id="5F47Ufk56tWmMxulwSTR-5" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=10;" value="Take Inputted position as Joint Goal" vertex="1">
           <mxGeometry height="50" width="110" x="80" y="150" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-13" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-12" value="">
@@ -457,7 +457,7 @@
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-14" connectable="0" parent="5F47Ufk56tWmMxulwSTR-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Yes" vertex="1">
           <mxGeometry relative="1" x="-0.68" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint y="4" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-20" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="5F47Ufk56tWmMxulwSTR-18">
@@ -469,7 +469,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-7" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Is Goal Valid?" vertex="1">
-          <mxGeometry height="80" width="85" x="92.5" y="230" as="geometry" />
+          <mxGeometry height="80" width="85" x="92.5" y="220" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-19" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-18" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -524,12 +524,12 @@
             <mxPoint x="-3" y="-3" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-51" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-50" value="">
+        <mxCell id="vvA__F3ORyU14_ZXX47z-2" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="vvA__F3ORyU14_ZXX47z-1" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-52" connectable="0" parent="5F47Ufk56tWmMxulwSTR-51" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="PI" vertex="1">
-          <mxGeometry relative="1" x="-0.5111" y="3" as="geometry">
-            <mxPoint x="-3" y="2" as="offset" />
+        <mxCell id="vvA__F3ORyU14_ZXX47z-3" connectable="0" parent="vvA__F3ORyU14_ZXX47z-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="PI" vertex="1">
+          <mxGeometry relative="1" x="0.2" y="-2" as="geometry">
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-27" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Phase" vertex="1">
@@ -539,7 +539,7 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="770" y="90" />
-              <mxPoint x="770" y="378" />
+              <mxPoint x="770" y="405" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -558,7 +558,7 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="770" y="190" />
-              <mxPoint x="770" y="378" />
+              <mxPoint x="770" y="405" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -571,7 +571,7 @@
           <mxGeometry height="90" width="105" x="637.5" y="145" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-40" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="End" vertex="1">
-          <mxGeometry height="35" width="70" x="505" y="360" as="geometry" />
+          <mxGeometry height="35" width="70" x="505" y="387.5" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-47" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-43" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="5F47Ufk56tWmMxulwSTR-40">
           <mxGeometry relative="1" as="geometry" />
@@ -579,11 +579,11 @@
         <mxCell id="5F47Ufk56tWmMxulwSTR-43" parent="1" style="whiteSpace=wrap;html=1;" value="Set phase to PI" vertex="1">
           <mxGeometry height="30" width="95" x="642.5" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-53" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="5F47Ufk56tWmMxulwSTR-40">
+        <mxCell id="vvA__F3ORyU14_ZXX47z-7" edge="1" parent="1" source="vvA__F3ORyU14_ZXX47z-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="5F47Ufk56tWmMxulwSTR-40">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-50" parent="1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;- Apply PI correction to goal joints&amp;nbsp;&lt;/div&gt;&lt;div&gt;- move arm to new goal joints&lt;/div&gt;" vertex="1">
-          <mxGeometry height="65" width="120" x="480" y="265" as="geometry" />
+        <mxCell id="vvA__F3ORyU14_ZXX47z-1" parent="1" style="whiteSpace=wrap;html=1;" value="error = difference between goal joints and current joints. PI controller applied to error to generate new goal joints. Move arm to new goal joints." vertex="1">
+          <mxGeometry height="110" width="120" x="480" y="260" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
