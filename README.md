@@ -177,9 +177,9 @@ In Cartesian mode, stick axes are interpreted as **end-effector velocity** in 3D
 
 | Stick | Cartesian Axis |
 |---|---|
-| Right Stick Y | X (forward/back) |
-| Right Stick X | Y (left/right) |
-| Left Stick Y | Z (up/down) |
+| Right Stick Y | Z (forward/back) |
+| Right Stick X | X (left/right) |
+| Left Stick Y | Y (up/down) |
 
 The path from the current pose to the goal is broken into intermediate steps of ≤2mm in each axis before calling IK — this improves numerical IK convergence for larger motions. If any intermediate IK step fails (singularity or unreachable pose), the command is dropped and the arm holds its current position.
 
