@@ -198,7 +198,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="tW1l3QQnYZ2q9OFHrwwx" name="Joint-Flowchart">
-    <mxGraphModel dx="1398" dy="770" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1410" dy="770" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -214,11 +214,11 @@
         <mxCell id="6ZTRoJQCay37Bo-AwFIL-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Controller axes data" vertex="1">
           <mxGeometry height="40" width="135" x="72.5" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="6ZTRoJQCay37Bo-AwFIL-10" edge="1" parent="1" source="6ZTRoJQCay37Bo-AwFIL-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6ZTRoJQCay37Bo-AwFIL-9" value="">
+        <mxCell id="cXYUyLuc7ce0_AKDwnfz-1" edge="1" parent="1" source="6ZTRoJQCay37Bo-AwFIL-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="6ZTRoJQCay37Bo-AwFIL-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="6ZTRoJQCay37Bo-AwFIL-7" parent="1" style="whiteSpace=wrap;html=1;" value="Add axes to current joint positions" vertex="1">
-          <mxGeometry height="50" width="120" x="80" y="240" as="geometry" />
+        <mxCell id="6ZTRoJQCay37Bo-AwFIL-7" parent="1" style="whiteSpace=wrap;html=1;" value="Add corresponding axes data to current joint positions, setting the new positions as joint goal" vertex="1">
+          <mxGeometry height="85" width="120" x="80" y="220" as="geometry" />
         </mxCell>
         <mxCell id="6ZTRoJQCay37Bo-AwFIL-12" edge="1" parent="1" source="6ZTRoJQCay37Bo-AwFIL-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="6ZTRoJQCay37Bo-AwFIL-11" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -386,11 +386,11 @@
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-3" parent="qDVKCfkhQNzgnCwjpLrE-1" style="ellipse;whiteSpace=wrap;html=1;" value="Listener Callback Start" vertex="1">
           <mxGeometry height="60" width="120" x="80" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="P4amnMT8XvO0oYf_1QA_-9" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="P4amnMT8XvO0oYf_1QA_-8" value="">
+        <mxCell id="8ur4l17nrlBPQpj9Yxim-1" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="8ur4l17nrlBPQpj9Yxim-0" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="qDVKCfkhQNzgnCwjpLrE-5" parent="qDVKCfkhQNzgnCwjpLrE-1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Save&lt;div&gt;Controller axes data&lt;/div&gt;and current HTM from current goal joints" vertex="1">
-          <mxGeometry height="60" width="147.5" x="66.25" y="160" as="geometry" />
+        <mxCell id="qDVKCfkhQNzgnCwjpLrE-5" parent="qDVKCfkhQNzgnCwjpLrE-1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" value="Save&lt;div&gt;Controller axes data&lt;/div&gt;and current goal joints" vertex="1">
+          <mxGeometry height="50" width="147.5" x="66.25" y="160" as="geometry" />
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-8" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-14" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -400,37 +400,50 @@
             <mxPoint x="-2" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="qDVKCfkhQNzgnCwjpLrE-10" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="qDVKCfkhQNzgnCwjpLrE-31">
+        <mxCell id="8ur4l17nrlBPQpj9Yxim-3" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-31" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="qDVKCfkhQNzgnCwjpLrE-11" connectable="0" parent="qDVKCfkhQNzgnCwjpLrE-10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="No" vertex="1">
-          <mxGeometry relative="1" x="-0.6008" y="2" as="geometry">
-            <mxPoint as="offset" />
+        <mxCell id="8ur4l17nrlBPQpj9Yxim-4" connectable="0" parent="8ur4l17nrlBPQpj9Yxim-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="No" vertex="1">
+          <mxGeometry relative="1" x="-0.2235" y="1" as="geometry">
+            <mxPoint y="1" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-12" parent="qDVKCfkhQNzgnCwjpLrE-1" style="rhombus;whiteSpace=wrap;html=1;" value="is new joint goal valid?" vertex="1">
-          <mxGeometry height="80" width="82.5" x="558.75" y="150" as="geometry" />
+          <mxGeometry height="80" width="82.5" x="410" y="277.5" as="geometry" />
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-13" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="qDVKCfkhQNzgnCwjpLrE-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-31" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-14" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="Update Goal Joints with new joint positions" vertex="1">
-          <mxGeometry height="60" width="120" x="540" y="270" as="geometry" />
+          <mxGeometry height="60" width="120" x="391.25" y="150" as="geometry" />
         </mxCell>
         <mxCell id="qDVKCfkhQNzgnCwjpLrE-31" parent="qDVKCfkhQNzgnCwjpLrE-1" style="ellipse;whiteSpace=wrap;html=1;" value="End" vertex="1">
-          <mxGeometry height="40" width="60" x="685.25" y="280" as="geometry" />
+          <mxGeometry height="40" width="60" x="530" y="297.5" as="geometry" />
         </mxCell>
         <mxCell id="P4amnMT8XvO0oYf_1QA_-11" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="P4amnMT8XvO0oYf_1QA_-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="P4amnMT8XvO0oYf_1QA_-10" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="P4amnMT8XvO0oYf_1QA_-8" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;Calculate goal HTM.&lt;/b&gt;&lt;/div&gt;&lt;div&gt;- position: controller as&amp;nbsp;&lt;span class=&quot;BxUVEf ILfuVd&quot; lang=&quot;en&quot;&gt;&lt;span class=&quot;hgKElc pOOWX&quot;&gt;Δ&lt;/span&gt;&lt;/span&gt;x,y,z from current cartesian position&lt;/div&gt;&lt;div&gt;- rotation matrix as the saved &lt;i&gt;reference&amp;nbsp;rotation matrix&lt;/i&gt;&lt;/div&gt;" vertex="1">
-          <mxGeometry height="120" width="130" x="240" y="130" as="geometry" />
+        <mxCell id="P4amnMT8XvO0oYf_1QA_-8" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="&lt;div&gt;&lt;b&gt;Calculate goal HTM.&lt;/b&gt;&lt;/div&gt;&lt;div&gt;- position: axes data as&amp;nbsp;&lt;span class=&quot;BxUVEf ILfuVd&quot; lang=&quot;en&quot;&gt;&lt;span class=&quot;hgKElc pOOWX&quot;&gt;Δ&lt;/span&gt;&lt;/span&gt;x,y,z from current cartesian position in current HTM&lt;/div&gt;&lt;div&gt;- rotation matrix as the saved &lt;i&gt;reference&amp;nbsp;rotation matrix&lt;/i&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="135" width="130" x="75" y="250" as="geometry" />
         </mxCell>
         <mxCell id="P4amnMT8XvO0oYf_1QA_-12" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="P4amnMT8XvO0oYf_1QA_-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="qDVKCfkhQNzgnCwjpLrE-12" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="P4amnMT8XvO0oYf_1QA_-10" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="Apply inverse kinematics between current HTM and goal HTM to acquire new goal joints, breaking into intermediate steps if required." vertex="1">
-          <mxGeometry height="105" width="130" x="400" y="137.5" as="geometry" />
+          <mxGeometry height="105" width="130" x="240" y="265" as="geometry" />
+        </mxCell>
+        <mxCell id="8ur4l17nrlBPQpj9Yxim-2" edge="1" parent="qDVKCfkhQNzgnCwjpLrE-1" source="8ur4l17nrlBPQpj9Yxim-0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="P4amnMT8XvO0oYf_1QA_-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="185" />
+              <mxPoint x="370" y="230" />
+              <mxPoint x="55" y="230" />
+              <mxPoint x="55" y="318" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8ur4l17nrlBPQpj9Yxim-0" parent="qDVKCfkhQNzgnCwjpLrE-1" style="whiteSpace=wrap;html=1;" value="Calculate current HTM using forward kinematics from current joints" vertex="1">
+          <mxGeometry height="60" width="120" x="230" y="155" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
@@ -483,11 +496,11 @@
         <mxCell id="5F47Ufk56tWmMxulwSTR-22" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="&lt;div&gt;- Initialize error arrays&lt;/div&gt;&lt;div&gt;- Initialize flags&lt;/div&gt;&lt;div&gt;- Set goal joints to global variable&lt;/div&gt;&lt;div&gt;- Set phase to initial&lt;/div&gt;&lt;div&gt;- Within tolerance false&lt;/div&gt;" vertex="1">
           <mxGeometry height="140" width="120" x="215" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-26" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-25" value="">
+        <mxCell id="c8eOsWTxr5zhywpNPnwh-1" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-25" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-24" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Timer Callback Start" vertex="1">
-          <mxGeometry height="60" width="110" x="360" y="60" as="geometry" />
+          <mxGeometry height="60" width="110" x="356.25" y="55" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-28" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5F47Ufk56tWmMxulwSTR-27" value="">
           <mxGeometry relative="1" as="geometry" />
@@ -532,7 +545,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5F47Ufk56tWmMxulwSTR-27" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Phase" vertex="1">
+        <mxCell id="5F47Ufk56tWmMxulwSTR-27" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Phase?" vertex="1">
           <mxGeometry height="80" width="80" x="500" y="150" as="geometry" />
         </mxCell>
         <mxCell id="5F47Ufk56tWmMxulwSTR-41" edge="1" parent="1" source="5F47Ufk56tWmMxulwSTR-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="5F47Ufk56tWmMxulwSTR-40">
